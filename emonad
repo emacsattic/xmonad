@@ -4,8 +4,8 @@
 #
 # Author: Jonas Bernoulli <jonas@bernoul.li>
 # Created: 20090621
-# Updated: 20090621
-# Version: 0.1
+# Updated: 20091112
+# Version: 0.1+
 # Homepage: https://github.com/tarsius/xmonad.el
 #
 # Commentary:
@@ -26,14 +26,6 @@ With no options only focus the dedicated minibuffer frame.
 EOF
 exit
 }
-# xdotool is required and it is assumed that a dedicated minibuffer
-# frame exists.  Also this script was only tested with Xmonad and
-# might not work as expected with other window managers.
-#
-# This script is currently broken in that it never prints anything to
-# standard out, making it useless as a pager.  It seams it is not
-# possible for emacsclient to (1) print to stout and at the same
-# time return even when the user aborts reading from the minibuffer.
 
 MINIBUF=$(xdotool search --title ${EMONAD_MINIBUF:-"\\*Minibuf-0\\*"})
 PREVWIN=$(xdotool getwindowfocus)
@@ -47,16 +39,17 @@ case $1 in
 *)  SEXP="$1" ;;
 esac
 
-STRING=$(emacsclient -e "\
+xdotool windowfocus $MINIBUF
+OUTPUT=$(emacsclient -e "\
 (let ((emonad-completions t)
-      (emonad-client (car server-clients)))
-  (select-frame-set-input-focus default-minibuffer-frame)
-  (unwind-protect $SEXP
-    (when (memq emonad-client server-clients)
-      (server-delete-client emonad-client t))))")
+      (emonad-client (car server-clients))
+      (minibuffer-auto-raise t))
+  (condition-case nil $SEXP
+    (quit (when (memq emonad-client server-clients)
+            (server-delete-client emonad-client t)))))")
 STATUS=$?
 
-echo ${STRING:1:$((${#STRING}-2))}
+echo ${OUTPUT:1:$((${#OUTPUT}-2))}
 
 if [[ -n "$PREVWIN" \
    && -z "$KEEP_FOCUS" \

@@ -74,9 +74,6 @@
 ;; * Minibuffer frame sometimes loses focus when it shouldn't.
 ;; * Turning of Xmonad mode fails to add minibuffer windows to existing
 ;;   frames and remove default minibuffer frame.
-;; * `emonad' fails to print anything to stout making it useless as
-;;   a replacment for e.g. dmenu.  This is due to a limitation in
-;;   `emacsclient' which has been reported upstream.
 
 ;;; Code:
 
