@@ -65,7 +65,7 @@
 ;; please clone the git repository at git://github.com/tarsius/xmonad.el.
 
 ;; **** This library REDEFINES `completion--insert-strings'
-;; ****             DEFINED IN `completions.el'.
+;; ****             DEFINED IN `minibuffer.el'.
 
 ;; Bugs:
 ;;
@@ -333,7 +333,7 @@ as a menu/pager."
   ;; (redraw-display)
   )
 
-;; REDEFINE `completion--insert-strings' DEFINED IN `completions.el'.
+;; REDEFINE `completion--insert-strings' DEFINED IN `minibuffer.el'.
 ;;
 ;; When in Xmonad mode (otherwise behaviour is unchanged):
 ;;
@@ -353,7 +353,8 @@ It also eliminates runs of equal strings."
 				      (string-width s)))
 				  strings)))
 	   (window (get-buffer-window (current-buffer) 0))
-	   (wwidth (if window (1- (window-width window))
+	   (wwidth (if window
+		       (1- (window-width window))
 		     (if xmonad-mode
 			 (cdr (assq 'width xmo-completions-frame-alist))
 		       79)))
@@ -394,8 +395,9 @@ It also eliminates runs of equal strings."
                                    'mouse-face 'highlight)
               (put-text-property (point) (progn (insert (car str)) (point))
                                  'mouse-face 'highlight)
-              (put-text-property (point) (progn (insert (cadr str)) (point))
-                                 'mouse-face nil))
+              (add-text-properties (point) (progn (insert (cadr str)) (point))
+                                   '(mouse-face nil
+                                     face completions-annotations)))
             ;; Next column to align to.
             (setq column (+ column
                             ;; Round up to a whole number of columns.
