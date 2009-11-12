@@ -299,6 +299,20 @@ as a menu/pager."
 			      frame "CARDINAL" 32 t)))
 
 ;; FIXME Help is very welcome.
+(defun xmo-select-minibuffer ()
+  "Select the minibuffer frame.
+
+This is useful if the minibuffer frame should ever loose focus.  Note
+that calling the emonad script without any arguments does the same thing."
+  ;; * This fails: (select-frame-set-input-focus default-minibuffer-frame)
+  (interactive)
+  (call-process "xdotool" nil nil nil "windowfocus"
+		(with-temp-buffer
+		  (call-process "xdotool" nil t nil "search"
+				"--title" "\\*Minibuffer\\*")
+		  (buffer-string))))
+
+;; FIXME Help is very welcome.
 (defun xmo-refresh (&optional forcep)
   "Refresh Xmonad's state.
 
