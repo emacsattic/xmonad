@@ -27,11 +27,12 @@ EOF
 exit
 }
 
-MINIBUF=$(xdotool search --title ${EMONAD_MINIBUF:-"\\*Minibuf-0\\*"})
+MINIBUF=$(xdotool search --title "\\*Minibuffer\\*")
 PREVWIN=$(xdotool getwindowfocus)
 
 case $1 in
--h|--help) usage ;;
+-h|--help)    usage ;;
+-v|--version) echo "emonad-$VERSION" ;;
 -i) SEXP="(call-interactively '$2)" ;;
 -e) SEXP="(call-interactively 'execute-extended-command)" ;;
 -f) SEXP="(call-interactively 'find-file-other-frame)" ;;

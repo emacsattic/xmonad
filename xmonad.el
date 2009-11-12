@@ -203,7 +203,7 @@ The following features are available:
 		 (symbol-function 'xmo-make-minibuffer-frame))
 	   (unless (assq 'xmo-end minibuffer-frame-alist)
 	     (setq minibuffer-frame-alist
-		   (nconc (cons (cons 'title "*Minibuf-0*")
+		   (nconc (cons (cons 'title "*Minibuffer*")
 				(copy-alist xmo-minibuffer-frame-alist))
 			  (list (cons 'minibuffer 'only)
 				(list 'xmo-end))
