@@ -197,6 +197,8 @@ The following features are available:
 	 ;; Minibuffer Frame.
 	 (when xmo-decicated-minibuffer-frame
 	   (add-hook 'minibuffer-exit-hook 'xmo-delete-completions)
+	   (put  'make-initial-minibuffer-frame 'nonxmo-function
+		 (symbol-function 'make-initial-minibuffer-frame))
 	   (fset 'make-initial-minibuffer-frame
 		 (symbol-function 'xmo-make-minibuffer-frame))
 	   (unless (assq 'xmo-end minibuffer-frame-alist)
@@ -227,6 +229,8 @@ The following features are available:
 	(t
 	 ;; Minibuffer Frame.
 	 (remove-hook 'minibuffer-exit-hook 'xmo-delete-completions)
+	 (fset 'make-initial-minibuffer-frame
+	       (get 'make-initial-minibuffer-frame 'nonxmo-function))
 	 (setq minibuffer-frame-alist
 	       (with-no-warnings
 		 (cdr (member* 'xmo-end minibuffer-frame-alist
