@@ -49,7 +49,10 @@ OUTPUT=$(emacsclient -e "\
             (server-delete-client emonad-client t)))))")
 STATUS=$?
 
-echo ${OUTPUT:1:$((${#OUTPUT}-2))}
+case $OUTPUT in
+\"*\") echo ${OUTPUT:1:$((${#OUTPUT}-2))} ;;
+*)     echo ${OUTPUT}
+esac
 
 if [[ -n "$PREVWIN" \
    && -z "$KEEP_FOCUS" \
