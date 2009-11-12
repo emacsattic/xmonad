@@ -4,8 +4,8 @@
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20090621
-;; Updated: 20090621
-;; Version: 0.1
+;; Updated: 20091112
+;; Version: 0.1++
 ;; Homepage: https://github.com/tarsius/xmonad.el
 ;; Keywords: convenience
 
@@ -80,7 +80,7 @@
 
 ;;; Code:
 
-(require 'cl) ; for member*
+(with-no-warnings (require 'cl)) ; for member*
 
 (defgroup xmobar nil
   "Integrate Xmonad and Emacs."
@@ -230,15 +230,17 @@ The following features are available:
 	 ;; Minibuffer Frame.
 	 (remove-hook 'minibuffer-exit-hook 'xmo-delete-completions)
 	 (setq minibuffer-frame-alist
-	       (cdr (member* 'xmo-end minibuffer-frame-alist
-			     :key 'car)))
+	       (with-no-warnings
+		 (cdr (member* 'xmo-end minibuffer-frame-alist
+			       :key 'car))))
 	 ;; Completions Frame.
 	 (setq special-display-buffer-names
 	       (delete "*Completions*" special-display-buffer-names))
 	 ;; Other Frames.
 	 (setq window-system-default-frame-alist
-	       (cdr (member* 'xmo-end window-system-default-frame-alist
-			     :key 'car)))
+	       (with-no-warnings
+		 (cdr (member* 'xmo-end window-system-default-frame-alist
+			       :key 'car))))
 	 ;; FIXME This only has an effect on new frames.
 	 (modify-all-frames-parameters '((minibuffer . t)))
 	 ;; FIXME Since there are still minibuffer-less frames the
