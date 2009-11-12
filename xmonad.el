@@ -279,7 +279,6 @@ as a menu/pager."
       (xmo-frame-set-strut-partial xmo-completions-frame args)
       (set-window-buffer window buffer)
       (set-window-dedicated-p window t)
-      ;; Kludge.  Xmonad does not notice that the strut disappeared.
       (xmo-refresh)
       (make-frame-visible xmo-completions-frame)
       (raise-frame xmo-completions-frame)))
@@ -290,7 +289,6 @@ as a menu/pager."
     (kill-buffer "*Completions*"))
   (when xmo-completions-frame
     (delete-frame xmo-completions-frame)
-    ;; Kludge.  Xmonad does not notice that the strut disappeared.
     (xmo-refresh)))
 
 (defun xmo-frame-set-strut-partial (frame properties)
@@ -300,25 +298,32 @@ as a menu/pager."
     (x-change-window-property "_NET_WM_STRUT_PARTIAL" geometry
 			      frame "CARDINAL" 32 t)))
 
-(defun xmo-refresh ()
-  "Refresh Xmonad's state." ; FIXME Help is very welcome.
+;; FIXME Help is very welcome.
+(defun xmo-refresh (&optional forcep)
+  "Refresh Xmonad's state.
 
-  ;; I was hoping that something like this would work:
-  ;; In Xmonad bind 'refresh' to F1 and here
-  ;; (call-process-shell-command "xdotool" nil nil nil "key" "F1")
+Xmonad does not instantly detect when a strut disappears.  This function
+can be used to force Xmonad to detect that such a change happended.
 
-  ;; Since that doesn't work create an X window and delete it right
-  ;; away.  This gives Xmonad a change to adapt to a new situation.
-  (with-temp-buffer
-    (delete-frame (make-frame '((title  . "emacsFlushState")
-				(width  . 1)
-				(height . 1)))))
+Unfortunately the only way I found to do this involves creating an
+X-window and deleting right away.  If you have a better idea let me know.
 
-  ;; Unfortunatly some Emacs windows end up not using all the space
-  ;; available in the containing frame.  And this does not fix it.
-  ;; Using a delay also does not help.
-  ;; (redraw-display)
-  )
+Unless FORCEP or `xmo-decicated-completions-frame' is t this function
+does nothing."
+  ;; * I was hoping that something like this would work:
+  ;;   In Xmonad bind 'refresh' to F1 and here
+  ;;   (call-process-shell-command "xdotool" nil nil nil "key" "F1")
+  ;; * Since that doesn't work create an X window and delete it right
+  ;;   away.  This gives Xmonad a change to adapt to a new situation.
+  ;; * Unfortunatly some Emacs windows end up not using all the space
+  ;;   available in the containing frame, even after creating the
+  ;;   tempory X-window.  Using (redraw-display) or a delay does not
+  ;;   fix it eigher.
+  (when (or forcep (eq xmo-decicated-completions-frame t))
+    (with-temp-buffer
+      (delete-frame (make-frame '((title  . "emacsFlushState")
+				  (width  . 1)
+				  (height . 1)))))))
 
 ;; REDEFINE `completion--insert-strings' DEFINED IN `minibuffer.el'.
 ;;
