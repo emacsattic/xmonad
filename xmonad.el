@@ -205,7 +205,10 @@ The following features are available:
 				(copy-alist xmo-minibuffer-frame-alist))
 			  (list (cons 'minibuffer 'only)
 				(list 'xmo-end))
-			  minibuffer-frame-alist))))
+			  minibuffer-frame-alist)))
+	   (put 'minibuffer-auto-raise 'noxmo-value
+		 minibuffer-auto-raise)
+	   (setq minibuffer-auto-raise t))
 	 ;; Completions Frame.
 	 (when xmo-decicated-completions-frame
 	   (add-to-list 'special-display-buffer-names
@@ -228,6 +231,8 @@ The following features are available:
 	       (with-no-warnings
 		 (cdr (member* 'xmo-end minibuffer-frame-alist
 			       :key 'car))))
+	 (setq minibuffer-auto-raise
+	       (get 'minibuffer-auto-raise 'noxmo-value))
 	 ;; Completions Frame.
 	 (setq special-display-buffer-names
 	       (delete "*Completions*" special-display-buffer-names))
