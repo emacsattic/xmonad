@@ -373,7 +373,7 @@ It also eliminates runs of equal strings."
 	   (wwidth (if window
 		       (1- (window-width window))
 		     (if xmonad-mode
-			 (cdr (assq 'width xmo-completions-frame-alist))
+			 (or (cdr (assq 'width xmo-completions-frame-alist)) 79)
 		       79)))
 	   (columns (min
 		     ;; At least 2 columns; at least 2 spaces between columns.
