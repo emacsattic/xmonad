@@ -9,23 +9,25 @@
 # Homepage: https://github.com/tarsius/xmonad.el
 #
 # Commentary:
-usage () { cat <<EOF
-emonad-0.1 -- Access the Emacs minibuffer frame using emacsclient.
 
-usage: emonad [-i SEXP]
-   or: emonad -e|-f
-   or: emonad -h|--help
+usage () { cat <<EOF
+emonad-$VERSION -- Access the Emacs minibuffer frame using emacsclient.
+
+usage: emonad [ SEXP | -i CMD | -e | -f ]
 
 options:
-   -i SEXP    Interactively call SEXP
-   -e         Interactively call command execute-extended-command
-   -f         Interactively call command find-file-other-frame
-   -h|--help  Show this information
+   -i SEXP       Interactively call SEXP
+   -e            Interactively call command execute-extended-command
+   -f            Interactively call command find-file-other-frame
+   -h|--help     Show this information
+   -v|--version  Show version information
 
 With no options only focus the dedicated minibuffer frame.
 EOF
 exit
 }
+
+VERSION="0.1+"
 
 MINIBUF=$(xdotool search --title "\\*Minibuffer\\*")
 PREVWIN=$(xdotool getwindowfocus)
