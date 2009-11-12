@@ -40,8 +40,8 @@
 ;;   input is confirmed or aborted the frame is removed.
 
 ;; * `emonad', a bash script wrapper around emacsclient, allows using
-;;   Emacs for purposes utilities like dzen, xmonad and dmenu are
-;;   normally used for.
+;;   Emacsclient for purposes utilities like Xmobar and Dmenu or even
+;;   Dzen are normally used for.
 
 ;; `xmonad-mode' can be turned off but this currently fails to restore
 ;; the previous configuration completely.  Most notably the minibuffer
@@ -56,10 +56,12 @@
 
 ;; Dependencies:
 ;;
-;; * >=Emacs-23     (from cvs,   not tested with older versions)
-;; * XMonad         (from darcs, not tested with older versions)
-;; * XMonad-Contrib (from darcs)
-;; * xdotool        (http://www.semicomplete.com/projects/xdotool/)
+;;   TODO ensure that released versions work also
+;;
+;; * >=Emacs-23.1.50 (from cvs,   not tested with older versions)
+;; * XMonad          (from darcs, not tested with older versions)
+;; * XMonad-Contrib  (from darcs)
+;; * xdotool         (http://www.semicomplete.com/projects/xdotool/)
 
 ;; If you would like to share your configuration or hack on `xmonad.el'
 ;; please clone the git repository at git://github.com/tarsius/xmonad.el.
@@ -69,10 +71,10 @@
 
 ;; Bugs:
 ;;
-;; * After the completions frame is deleted frames sometimes fail to use
-;;   all the available space.
+;; * After the completions frame/strut is deleted frames sometimes fail
+;;   to use all the available space.
 ;; * Minibuffer frame sometimes loses focus when it shouldn't.
-;; * Turning of Xmonad mode fails to add minibuffer windows to existing
+;; * Turning off Xmonad mode fails to add minibuffer windows to existing
 ;;   frames and remove default minibuffer frame.
 
 ;;; Code:
@@ -245,10 +247,10 @@ The following features are available:
 	       (with-no-warnings
 		 (cdr (member* 'xmo-end window-system-default-frame-alist
 			       :key 'car))))
-	 ;; FIXME This only has an effect on new frames.
+	 ;; * FIXME This only has an effect on new frames.
 	 (modify-all-frames-parameters '((minibuffer . t)))
-	 ;; FIXME Since there are still minibuffer-less frames the
-	 ;; deficated minibuffer frame can't be deleted.
+	 ;; * FIXME Since there are still minibuffer-less frames the
+	 ;; dedicated minibuffer frame can't be deleted.
 	 ;; (delete-frame default-minibuffer-frame)
 	 )))
 
