@@ -171,8 +171,6 @@ DO NOT EDIT this variable.")
 See http://standards.freedesktop.org/wm-spec/1.3/ar01s05.html#id2523368
 DO NOT EDIT this variable.")
 
-(defconst xmo-emonad-minibuffer-focus-delay 0.4)
-
 (define-minor-mode xmonad-mode
   "Integrate Xmonad and Emacs.
 With no argument, this command toggles the mode.
@@ -285,15 +283,7 @@ as a menu/pager."
       (xmo-refresh)
       (make-frame-visible xmo-completions-frame)
       (raise-frame xmo-completions-frame)))
-  (prog1 (frame-selected-window xmo-completions-frame)
-    ;; Kludge.  When using the `emonad' script we have to ensure the
-    ;; minibuffer frame get's the focus.  A little delay is necessary.
-    ;; If the delay is to long then it is noticable.  If it is to short
-    ;; then the minibuffer might not get focus sometimes.  Is there a
-    ;; better way to ensure focus?
-    (when (bound-and-true-p emonad-completions)
-      (sleep-for xmo-emonad-minibuffer-focus-delay)
-      (select-frame-set-input-focus default-minibuffer-frame))))
+  (frame-selected-window xmo-completions-frame))
 
 (defun xmo-delete-completions ()
   (when (get-buffer "*Completions*")
