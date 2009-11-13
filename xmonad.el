@@ -86,7 +86,7 @@
   :group 'environment
   :group 'X)
 
-(defcustom xmo-decicated-minibuffer-frame 1
+(defcustom xmo-dedicated-minibuffer-frame 1
   "In Xmonad mode; Whether to create a default minibuffer frame.
 nil Do not create default minibuffer frame.
 t   Create default minibuffer frame; other frames use their own minibuffer.
@@ -96,7 +96,7 @@ t   Create default minibuffer frame; other frames use their own minibuffer.
 		 (const 1   :tag "Use default minibuffer frame for all frames"))
   :group 'xmobar)
 
-(defcustom xmo-decicated-completions-frame 1
+(defcustom xmo-dedicated-completions-frame 1
   "In Xmonad mode; Whether to show the *Completions* buffer in a seperate frame."
   :type '(choice (const nil :tag "Do not use a dedicated completion frame")
 		 (const t   :tag "Use a dedicated completion frame; as strut")
@@ -199,7 +199,7 @@ The following features are available:
   :global t
   (cond (xmonad-mode
 	 ;; Minibuffer Frame.
-	 (when xmo-decicated-minibuffer-frame
+	 (when xmo-dedicated-minibuffer-frame
 	   (add-hook 'minibuffer-exit-hook 'xmo-delete-completions)
 	   (put  'make-initial-minibuffer-frame 'nonxmo-function
 		 (symbol-function 'make-initial-minibuffer-frame))
@@ -216,13 +216,13 @@ The following features are available:
 		 minibuffer-auto-raise)
 	   (setq minibuffer-auto-raise t))
 	 ;; Completions Frame.
-	 (when xmo-decicated-completions-frame
+	 (when xmo-dedicated-completions-frame
 	   (add-to-list
 	    'special-display-buffer-names
 	    (list "*Completions*"
 		  'xmo-display-completions
 		  (cons (cons 'title
-			      (if (eq xmo-decicated-completions-frame t)
+			      (if (eq xmo-dedicated-completions-frame t)
 				  "emacsCompletionsStrut"
 				"emacsCompletionsFloat"))
 			xmo-completions-frame-alist))))
@@ -339,7 +339,7 @@ can be used to force Xmonad to detect that such a change happended.
 Unfortunately the only way I found to do this involves creating an
 X-window and deleting right away.  If you have a better idea let me know.
 
-Unless FORCEP or `xmo-decicated-completions-frame' is t this function
+Unless FORCEP or `xmo-dedicated-completions-frame' is t this function
 does nothing."
   ;; * I was hoping that something like this would work:
   ;;   In Xmonad bind 'refresh' to F1 and here
@@ -350,7 +350,7 @@ does nothing."
   ;;   available in the containing frame, even after creating the
   ;;   tempory X-window.  Using (redraw-display) or a delay does not
   ;;   fix it eigher.
-  (when (or forcep (eq xmo-decicated-completions-frame t))
+  (when (or forcep (eq xmo-dedicated-completions-frame t))
     (with-temp-buffer
       (delete-frame (make-frame '((title  . "emacsFlushState")
 				  (width  . 1)
