@@ -207,7 +207,7 @@ The following features are available:
 		 (symbol-function 'xmo-make-minibuffer-frame))
 	   (unless (assq 'xmo-end minibuffer-frame-alist)
 	     (setq minibuffer-frame-alist
-		   (nconc (cons (cons 'title "*Minibuffer*")
+		   (nconc (cons (cons 'title "emacsMinibuffer")
 				(copy-alist xmo-minibuffer-frame-alist))
 			  (list (cons 'minibuffer 'only)
 				(list 'xmo-end))
@@ -223,8 +223,8 @@ The following features are available:
 		  'xmo-display-completions
 		  (cons (cons 'title
 			      (if (eq xmo-decicated-completions-frame t)
-				  "*Completions-Strut*"
-				"*Completions-Float*"))
+				  "emacsCompletionsStrut"
+				"emacsCompletionsFloat"))
 			xmo-completions-frame-alist))))
 	 ;; Other Frames.
 	 (let* ((ass (assq 'x window-system-default-frame-alist))
