@@ -1,0 +1,20 @@
+name:               xmonad-emacs
+version:            0.1
+homepage:           http://github.com/tarsius/xmonad-emacs
+synopsis:           Integrate Xmonad and Emacs
+description:
+    TODO
+category:           System
+license:            BSD3
+author:             Jonas Bernoulli
+maintainer:         jonas@bernoul.li
+cabal-version:      >= 1.2.1
+build-type:         Simple
+
+library
+    build-depends:      base,
+                        X11>=1.4.6.1,
+                        xmonad>=0.9, xmonad<1,
+                        xmonad-contrib>=0.9, xmonad-contrib<1
+    ghc-options:        -fwarn-tabs -Wall
+    exposed-modules:    XMonad.Util.Emacs
