@@ -1,12 +1,12 @@
-;;; xmonad.el -- integrate Xmonad and Emacs
+;;; xmonad.el -- integrate XMonad and Emacs
 
 ;; Copyright (C) 2009  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20090621
-;; Updated: 20091112
+;; Updated: 20091114
 ;; Version: 0.1++
-;; Homepage: https://github.com/tarsius/xmonad.el
+;; Homepage: http://tarsius.github.com/xmonad-emacs/
 ;; Keywords: convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,24 +24,38 @@
 
 ;;; Commentary:
 
-;; Turning `xmonad-mode' on integrates Xmonad and Emacs, creating an
-;; even more enjoyable environment.
+;; xmonad-emacs tries to create an even more enjoyable environment than
+;; what you already get from just using both xmonad and emacs by making
+;; the two aware of one another.
 
-;; When `xmonad-mode' is turned on and Xmonad and Emacs have been
-;; configure as described below the following features are available:
+;; xmonad-emacs consists of xmonad.el which make emacs aware of xmonad
+;; and XMonad.Util.Emacs to make xmonad aware of emacs.  Additionally a
+;; shell script wrapper around emacsclient named emonad is provided
+;; which allows using emacs as a menu, just like xmobar or dzen.
 
-;; * Instead of one minibuffer per frame a dedicated minibuffer frame
-;;   is used which is placed at the bottom (or top) of the screen and
-;;   is visible on all workspaces.
-
+;; The two most important features of xmonad-emacs are:
+;;
+;; * Instead of using one minibuffer per frame a dedicated minibuffer
+;;   frame is used which is placed at the bottom (or top) of the screen
+;;   and is visible on all workspaces.
+;;
 ;; * When completing input in the minibuffer the *Completions* buffer is
-;;   shown in a dedicated frame placed at one of the edges of the screen.
-;;   Other X windows are resized to make room for that X window.  Once
-;;   input is confirmed or aborted the frame is removed.
+;;   shown in a dedicated frame.  This frame can eigher float over other
+;;   X windows or is placed at one of the edges of the screen while other
+;;   X windows are resized to make room for it.  Once input is confirmed
+;;   or aborted the frame is removed.
 
-;; * `emonad', a bash script wrapper around emacsclient, allows using
-;;   Emacsclient for purposes utilities like Xmobar and Dmenu or even
-;;   Dzen are normally used for.
+;; This has at least the following benefits:
+;;
+;; * Both the minibuffer and completion buffers appear in consistant
+;;   places on the screen.
+;;
+;; * The active buffer doesn't shrink when completing some input.
+;;
+;; * Last but not least emacs can be used as a menu - from xmonad itself
+;;   for example to spawn application but also by other applications like
+;;   Uzbl that could benefit from using something a bit more advanced than
+;;   Dmenu.
 
 ;; `xmonad-mode' can be turned off but this currently fails to restore
 ;; the previous configuration completely.  Most notably the minibuffer
@@ -49,33 +63,41 @@
 ;; modified to use their own minibuffer window instead of the default
 ;; minibuffer frame.
 
-;; Example configurations for Xmonad and Emacs can be found in the files
-;; `xmonad.hs' and `emacs.el', which are distributed with this library.
-;; You have to read those files and adjust your configuration accordingly,
-;; before turning `xmonad-mode' on or strange things will happen.
+;; For more information see http://tarsius.github.com/xmonad-emacs/.
 
-;; Dependencies:
-;;
-;;   TODO ensure that released versions work also
-;;
-;; * >=Emacs-23.1.50 (from cvs,   not tested with older versions)
-;; * XMonad          (from darcs, not tested with older versions)
-;; * XMonad-Contrib  (from darcs)
-;; * xdotool         (http://www.semicomplete.com/projects/xdotool/)
+;;; Configuration:
 
-;; If you would like to share your configuration or hack on `xmonad.el'
-;; please clone the git repository at git://github.com/tarsius/xmonad.el.
+;; TODO cleanup and extend
 
+;; Emacs has to be configures as follows.  But before you do that you
+;; should first configure Xmonad as described at
+;; http://http://tarsius.github.com/xmonad-emacs/XMonad-Util-Emacs.html.
+
+;; This example assumes a monitor resolution of 2560x1600.  The minibuffer
+;; frame is places at the bottom and the completion frame at the left.
+
+;; (add-to-list 'load-path "/path/to/emacs/xmonad/")
+;; (require 'xmonad)
+;; (setq xmo-minibuffer-frame-alist
+;;       '((left               .    0)   ; pixels
+;;         (top                . 1570)   ; pixels
+;;         (width              .  282)   ; characters
+;;         (height             .    2)   ; lines
+;;         (strut-bottom       .   30)   ; pixels
+;;         (strut-bottom-end-x . 1599))) ; pixels, do not forget this
+;; (setq xmo-completions-frame-alist
+;;       '((left               .    0)
+;;         (top                .   19)
+;;         (width              .   50)
+;;         (height             .  103)
+;;         (strut-left         .  468)
+;;         (strut-left-end-y   . 1566))) ; do not forget this
+;; (xmonad-mode 1)
+
+;; ****
 ;; **** This library REDEFINES `completion--insert-strings'
 ;; ****             DEFINED IN `minibuffer.el'.
-
-;; Bugs:
-;;
-;; * After the completions frame/strut is deleted frames sometimes fail
-;;   to use all the available space.
-;; * Minibuffer frame sometimes loses focus when it shouldn't.
-;; * Turning off Xmonad mode fails to add minibuffer windows to existing
-;;   frames and remove default minibuffer frame.
+;; ****
 
 ;;; Code:
 
@@ -316,20 +338,6 @@ as a menu/pager."
 			      frame "CARDINAL" 32 t)))
 
 ;; FIXME Help is very welcome.
-(defun xmo-select-minibuffer ()
-  "Select the minibuffer frame.
-
-This is useful if the minibuffer frame should ever loose focus.  Note
-that calling the emonad script without any arguments does the same thing."
-  ;; * This fails: (select-frame-set-input-focus default-minibuffer-frame)
-  (interactive)
-  (call-process "xdotool" nil nil nil "windowfocus"
-		(with-temp-buffer
-		  (call-process "xdotool" nil t nil "search"
-				"--title" "\\*Minibuffer\\*")
-		  (buffer-string))))
-
-;; FIXME Help is very welcome.
 (defun xmo-refresh (&optional forcep)
   "Refresh Xmonad's state.
 
@@ -428,4 +436,3 @@ It also eliminates runs of equal strings."
 
 (provide 'xmonad)
 ;;; xmonad.el ends here
-

@@ -8,7 +8,12 @@
 -- Stability   :  unstable
 -- Portability :  unportable
 --
--- TODO
+-- The xmonad part of xmonad-emacs.  This file only describes how to
+-- configure Xmonad.  Do that first then configure Emacs as described at
+-- <http://github.com/tarsius/xmonad-emacs/blob/master/xmonad.el>.
+--
+-- For an introduction to xmonad-emacs see
+-- <http://tarsius.github.com/xmonad-emacs/>.
 --
 -----------------------------------------------------------------------------
 
@@ -33,13 +38,7 @@ import qualified XMonad.StackSet as W
 -- >     { layoutHook = avoidStruts $ myLayout
 -- >     , manageHook = myManageHook <+> emacsManageHook
 -- >     }
---
--- After you have done this you also have to configure Emacs as described
--- in xmonad.el.
 
--- | Adding this to manageHook causes the Completion and Minibuffer frames
---   to behave as configured in Emacs.
---
 emacsManageHook :: ManageHook
 emacsManageHook = composeAll
     [ manageMonitor emacsMinibufferMonitor

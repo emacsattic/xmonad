@@ -1,9 +1,53 @@
 name:               xmonad-emacs
 version:            0.1
 homepage:           http://github.com/tarsius/xmonad-emacs
-synopsis:           Integrate Xmonad and Emacs
+synopsis:           Integrate xmonad and emacs
 description:
-    TODO
+    xmonad-emacs tries to create an even more enjoyable environment than
+    what you already get from just using both xmonad and emacs by making
+    the two aware of one another.
+    .
+    xmonad-emacs consists of xmonad.el which make emacs aware of xmonad
+    and XMonad.Util.Emacs to make xmonad aware of emacs.  Additionally a
+    shell script wrapper around emacsclient named emonad is provided
+    which allows using emacs as a menu, just like xmobar or dzen.
+    .
+    The two most important features of xmonad-emacs are:
+    .
+    * Instead of using one minibuffer per frame a dedicated minibuffer
+      frame is used which is placed at the bottom (or top) of the screen
+      and is visible on all workspaces.
+    .
+    * When completing input in the minibuffer the *Completions* buffer is
+      shown in a dedicated frame.  This frame can eigher float over other
+      X windows or is placed at one of the edges of the screen while other
+      X windows are resized to make room for it.  Once input is confirmed
+      or aborted the frame is removed.
+    .
+    This has at least the following benefits:
+    .
+    * Both the minibuffer and completion buffers appear in consistant
+      places on the screen.
+    .
+    * The active buffer doesn't shrink when completing some input.
+    .
+    * Last but not least emacs can be used as a menu - from xmonad itself
+      for example to spawn application but also by other applications like
+      Uzbl that could benefit from using something a bit more advanced than
+      Dmenu.
+    .
+    Configuration:
+    .
+    1. First installing this package as described at
+    <http://github.com/tarsius/xmonad-emacs/blob/master/INSTALL.md>
+    .
+    2. Then configure xmonad as described at "XMonad.Util.Emacs".
+    .
+    3. Finally configure emacs as described in xmonad.el
+    (<http://github.com/tarsius/xmonad-emacs/blob/master/xmonad.el>).
+    .
+    If you would like to contribute to xmonad-emacs clone the git
+    repository at <http://github.com/tarsius/xmonad-emacs>.
 category:           System
 license:            BSD3
 author:             Jonas Bernoulli
