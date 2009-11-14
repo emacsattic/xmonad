@@ -96,9 +96,11 @@ t   Create default minibuffer frame; other frames use their own minibuffer.
 		 (const 1   :tag "Use default minibuffer frame for all frames"))
   :group 'xmobar)
 
-(defcustom xmo-decicated-completions-frame t
+(defcustom xmo-decicated-completions-frame 1
   "In Xmonad mode; Whether to show the *Completions* buffer in a seperate frame."
-  :type 'boolean
+  :type '(choice (const nil :tag "Do not use a dedicated completion frame")
+		 (const t   :tag "Use a dedicated completion frame; as strut")
+		 (const 1   :tag "Use a dedicated completion frame; floating"))
   :group 'xmobar)
 
 (defcustom xmo-minibuffer-frame-alist nil
@@ -215,11 +217,15 @@ The following features are available:
 	   (setq minibuffer-auto-raise t))
 	 ;; Completions Frame.
 	 (when xmo-decicated-completions-frame
-	   (add-to-list 'special-display-buffer-names
-			(list "*Completions*"
-			      'xmo-display-completions
-			      (cons (cons 'title "*Completions*")
-				    xmo-completions-frame-alist))))
+	   (add-to-list
+	    'special-display-buffer-names
+	    (list "*Completions*"
+		  'xmo-display-completions
+		  (cons (cons 'title
+			      (if (eq xmo-decicated-completions-frame t)
+				  "*Completions-Strut*"
+				"*Completions-Float*"))
+			xmo-completions-frame-alist))))
 	 ;; Other Frames.
 	 (let* ((ass (assq 'x window-system-default-frame-alist))
 	 	(old (cdr ass))
