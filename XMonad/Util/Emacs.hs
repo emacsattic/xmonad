@@ -46,6 +46,7 @@ emacsManageHook = composeAll
     , title =? "emacsFlushState"       --> doFloat
     , title =? "emacsCompletionsFloat" --> doFloat
     , title =? "emacsCompletionsFloat" --> doF W.focusDown
+    , title =? "Ediff"                 --> doFloat
     ]
 
 emacsMinibufferMonitor :: Monitor a
