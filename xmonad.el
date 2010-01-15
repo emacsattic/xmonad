@@ -5,7 +5,7 @@
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20090621
 ;; Updated: 20100115
-;; Version: 0.1++
+;; Version: 0.2_alpha1
 ;; Homepage: http://tarsius.github.com/xmonad-emacs/
 ;; Keywords: convenience
 
@@ -23,6 +23,14 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
+
+;; MAINTAINER WANTED.  I have stopped using xmonad and switched back to
+;; wmii.  Xmonad is a nice window manager but I really like the way
+;; windows are arranged in columns in wmii.  Making xmonad behave the
+;; same way would have required learning haskell - and I just don't have
+;; the time for this at the moment.  If you are interested in taking over
+;; this library please contact me - but be aware that this library is not
+;; quite usable yet in it's current form.
 
 ;; xmonad-emacs tries to create an even more enjoyable environment than
 ;; what you already get from just using both xmonad and emacs by making
