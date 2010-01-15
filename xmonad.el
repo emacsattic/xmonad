@@ -4,7 +4,7 @@
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20090621
-;; Updated: 20091114
+;; Updated: 20100115
 ;; Version: 0.1++
 ;; Homepage: http://tarsius.github.com/xmonad-emacs/
 ;; Keywords: convenience
@@ -103,6 +103,8 @@
 
 (with-no-warnings (require 'cl)) ; for member*
 
+(require 'fit-frame)
+
 (defgroup xmobar nil
   "Integrate Xmonad and Emacs."
   :group 'environment
@@ -152,6 +154,13 @@ if you want the dedicated minibuffer frame to have a mode line."
 
 (defcustom xmo-completions-frame-alist nil
   "In Xmonad mode; Alist of parameters for the completion frame."
+  :type '(repeat (cons :format "%v"
+		       (symbol :tag "Parameter")
+		       (sexp :tag "Value")))
+  :group 'xmobar)
+
+(defcustom xmo-completions-gravity nil
+  "In Xmonad mode; Direction."
   :type '(repeat (cons :format "%v"
 		       (symbol :tag "Parameter")
 		       (sexp :tag "Value")))
@@ -321,6 +330,7 @@ as a menu/pager."
       (xmo-refresh)
       (make-frame-visible xmo-completions-frame)
       (raise-frame xmo-completions-frame)))
+  (fit-frame xmo-completions-frame)
   (frame-selected-window xmo-completions-frame))
 
 (defun xmo-delete-completions ()
@@ -390,6 +400,7 @@ It also eliminates runs of equal strings."
 			 (or (cdr (assq 'width xmo-completions-frame-alist)) 79)
 		       79)))
 	   (columns (min
+		     1 ; FIXME
 		     ;; At least 2 columns; at least 2 spaces between columns.
 		     (max 2 (/ wwidth (+ 2 length)))
 		     ;; Don't allocate more columns than we can fill.
