@@ -3,10 +3,6 @@
 ;; Copyright (C) 2009  Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Created: 20090621
-;; Updated: 20100115
-;; Version: 0.2_alpha1
-;; Homepage: http://tarsius.github.com/xmonad-emacs/
 ;; Keywords: convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -110,8 +106,6 @@
 ;;; Code:
 
 (with-no-warnings (require 'cl)) ; for member*
-
-(require 'fit-frame)
 
 (defgroup xmobar nil
   "Integrate Xmonad and Emacs."
@@ -338,7 +332,7 @@ as a menu/pager."
       (xmo-refresh)
       (make-frame-visible xmo-completions-frame)
       (raise-frame xmo-completions-frame)))
-  (fit-frame xmo-completions-frame)
+  (fit-frame-to-buffer xmo-completions-frame)
   (frame-selected-window xmo-completions-frame))
 
 (defun xmo-delete-completions ()
