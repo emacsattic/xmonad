@@ -105,7 +105,7 @@
 
 ;;; Code:
 
-(with-no-warnings (require 'cl)) ; for member*
+(require 'cl-lib)
 
 (defgroup xmobar nil
   "Integrate Xmonad and Emacs."
@@ -274,8 +274,8 @@ The following features are available:
 	       (get 'make-initial-minibuffer-frame 'nonxmo-function))
 	 (setq minibuffer-frame-alist
 	       (with-no-warnings
-		 (cdr (member* 'xmo-end minibuffer-frame-alist
-			       :key 'car))))
+		 (cdr (cl-member 'xmo-end minibuffer-frame-alist
+				 :key 'car))))
 	 (setq minibuffer-auto-raise
 	       (get 'minibuffer-auto-raise 'noxmo-value))
 	 ;; Completions Frame.
@@ -284,8 +284,8 @@ The following features are available:
 	 ;; Other Frames.
 	 (setq window-system-default-frame-alist
 	       (with-no-warnings
-		 (cdr (member* 'xmo-end window-system-default-frame-alist
-			       :key 'car))))
+		 (cdr (cl-member 'xmo-end window-system-default-frame-alist
+				 :key 'car))))
 	 ;; * FIXME This only has an effect on new frames.
 	 (modify-all-frames-parameters '((minibuffer . t)))
 	 ;; * FIXME Since there are still minibuffer-less frames the
